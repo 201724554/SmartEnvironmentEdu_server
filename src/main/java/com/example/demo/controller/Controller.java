@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.socket.util.WebSocketUtil;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Map;
@@ -21,5 +18,10 @@ public class Controller {
         {
             e.printStackTrace();
         }
+    }
+    @PostMapping("/testt")
+    public void test2(@RequestBody Map<String,Object> mp)
+    {
+        System.out.println(mp);
     }
 }
