@@ -1,14 +1,21 @@
 package com.example.demo.controller;
 
-import com.example.demo.socket.util.WebSocketUtil;
+//import com.example.demo.socket.util.WebSocketUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 public class Controller {
-    @GetMapping("/test/{sessionId}")
+
+    /*@GetMapping("/test/{sessionId}")
     public void test(@PathVariable String sessionId)
     {
         try{
@@ -18,10 +25,10 @@ public class Controller {
         {
             e.printStackTrace();
         }
-    }
-    @PostMapping("/testt")
-    public void test2(@RequestBody Map<String,Object> mp)
+    }*/
+    @GetMapping("/home")
+    public String home()
     {
-        System.out.println(mp);
+        return "home";
     }
 }

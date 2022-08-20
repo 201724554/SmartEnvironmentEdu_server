@@ -1,4 +1,4 @@
-package com.example.demo.socket.util;
+/*package com.example.demo.socket.util;
 
 import com.example.demo.socket.config.WebSocketHandler;
 import org.springframework.web.socket.TextMessage;
@@ -12,4 +12,4 @@ public class WebSocketUtil {
         WebSocketSession webSocketSession = (WebSocketSession) WebSocketHandler.sessionMap.get(sessionId);
         webSocketSession.sendMessage(new TextMessage(message));
     }
-}
+}*/

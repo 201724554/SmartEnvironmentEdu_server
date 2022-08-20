@@ -8,21 +8,28 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static com.example.demo.security.config.TestFilterApply.testFilterApply;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CorsConfig corsConfig;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
                 .addFilter(corsConfig.corsFilter())
+                .apply(testFilterApply())
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .logout().logoutUrl("/logout");
+                .logout().logoutUrl("/logout")
+                .and()
+                .authorizeHttpRequests().anyRequest().permitAll();
         return http.build();
     }
 }

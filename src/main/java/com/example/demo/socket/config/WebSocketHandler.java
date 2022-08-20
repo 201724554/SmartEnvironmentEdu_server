@@ -1,4 +1,4 @@
-package com.example.demo.socket.config;
+/*package com.example.demo.socket.config;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
@@ -39,5 +39,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         super.handleTransportError(session, exception);
+        System.out.println(exception.getMessage());
     }
-}
+
+    @Override
+    protected void handlePongMessage(WebSocketSession session, PongMessage message) throws Exception {
+        super.handlePongMessage(session, message);
+        System.out.println("pong");
+    }
+
+
+}*/
