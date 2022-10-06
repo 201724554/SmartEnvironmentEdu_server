@@ -37,7 +37,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
             json.forEach((idx,elem)->{
                 System.out.println(idx + " " + elem);
             });
-
             ACK ack = ACK.builder()
                     .status(200)
                     .measure(true)
