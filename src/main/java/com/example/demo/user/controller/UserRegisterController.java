@@ -17,8 +17,7 @@ public class UserRegisterController {
     @PostMapping("/register")
     private void register(@RequestBody User user)
     {
-        System.out.println("start");
-        System.out.println("done");
+
     }
 
     @ExceptionHandler(UserRegisterException.class)

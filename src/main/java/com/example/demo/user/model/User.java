@@ -35,24 +35,28 @@ public class User {
 
     public void setUsername(String username) throws UserRegisterException
     {
-        if(username.length() > 20)
-        {
-            throw new UserRegisterException();
-        }
-        if(!Pattern.matches("[a-z]|\\d|[A-Z]",username))
+        if(!Pattern.matches("^[\\w_]{5,20}$",username))
         {
             throw new UserRegisterException();
         }
         this.username = username;
     }
 
-    public void setPassword(String password)
+    public void setPassword(String password) throws UserRegisterException
     {
+        if(!Pattern.matches("^.*(?=^.{8,20}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$",password))
+        {
+            throw new UserRegisterException();
+        }
         this.password = password;
     }
 
-    public void setEmail(String email)
+    public void setEmail(String email) throws UserRegisterException
     {
+        if(!Pattern.matches("^[\\da-zA-Z]([-_.]?[\\da-zA-Z])*@[\\da-zA-Z]([-_.]?[\\da-zA-Z])*.[a-zA-Z]{2,3}$",email))
+        {
+            throw new UserRegisterException();
+        }
         this.email = email;
     }
 
@@ -61,18 +65,14 @@ public class User {
        this.role = role;
     }
 
-    public void setUserDeviceMAC(String userDeviceMAC)
+    public void setUserDeviceMAC(String userDeviceMAC) throws UserRegisterException
     {
+        if(!Pattern.matches
+                ("^[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]$",
+                        userDeviceMAC))
+        {
+            throw new UserRegisterException();
+        }
         this.userDeviceMAC = userDeviceMAC;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", userDeviceMAC='" + userDeviceMAC + '\'' +
-                '}';
     }
 }
