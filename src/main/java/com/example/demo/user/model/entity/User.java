@@ -1,0 +1,109 @@
+package com.example.demo.user.model.entity;
+
+import com.example.demo.user.model.enumerate.IsActive;
+import com.example.demo.user.model.enumerate.Role;
+import lombok.*;
+
+import javax.persistence.*;
+import java.util.regex.Pattern;
+
+@Entity
+@Getter
+@Builder
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn
+@NoArgsConstructor
+@AllArgsConstructor
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(nullable = false, length = 20)
+    private String username;
+
+    @Column(nullable = false, length = 20)
+    private String password;
+
+    @Column(nullable = false, length = 40)
+    private String email;
+
+    @Column(nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private Role role = Role.STUDENT;
+
+    @Column(length = 20)
+    private String userDeviceMAC;
+
+    @Column(nullable = false, length = 3)
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private IsActive isActive = IsActive.NO;
+
+    public void setUsername(String username)
+    {
+        if(!Pattern.matches("^[\\w_]{5,20}$",username))
+        {
+            throw new IllegalArgumentException();
+        }
+        this.username = username;
+    }
+
+    public void setPassword(String password)
+    {
+        if(!Pattern.matches("^.*(?=^.{8,20}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$",password))
+        {
+            throw new IllegalArgumentException();
+        }
+        this.password = password;
+    }
+
+    public void setEmail(String email)
+    {
+        if(!Pattern.matches("^[\\da-zA-Z]([-_.]?[\\da-zA-Z])*@[\\da-zA-Z]([-_.]?[\\da-zA-Z])*.[a-zA-Z]{2,3}$",email))
+        {
+            throw new IllegalArgumentException();
+        }
+        this.email = email;
+    }
+
+    public void setRole(String role)
+    {
+        try
+        {
+            this.role = Role.valueOf(role);
+        }
+        catch (IllegalArgumentException e)
+        {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void setUserDeviceMAC(String userDeviceMAC)
+    {
+        /*if(!Pattern.matches
+                ("^[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]$",
+                        userDeviceMAC))
+        {
+            throw new IllegalArgumentException();
+        }*/
+        this.userDeviceMAC = userDeviceMAC;
+    }
+
+    public void setIsActive(IsActive isActive)
+    {
+        this.isActive = isActive;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                ", userDeviceMAC='" + userDeviceMAC + '\'' +
+                '}';
+    }
+}
