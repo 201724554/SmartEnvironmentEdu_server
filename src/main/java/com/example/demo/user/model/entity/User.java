@@ -2,14 +2,16 @@ package com.example.demo.user.model.entity;
 
 import com.example.demo.user.model.enumerate.IsActive;
 import com.example.demo.user.model.enumerate.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.regex.Pattern;
 
 @Entity
 @Getter
-@Builder
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
 @NoArgsConstructor
@@ -22,7 +24,7 @@ public class User {
     @Column(nullable = false, length = 20)
     private String username;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 100)
     private String password;
 
     @Column(nullable = false, length = 40)
@@ -30,16 +32,18 @@ public class User {
 
     @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private Role role = Role.STUDENT;
+    private Role role;
 
     @Column(length = 20)
     private String userDeviceMAC;
 
     @Column(nullable = false, length = 3)
     @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private IsActive isActive = IsActive.NO;
+    private IsActive isActive;
+
+    @CreationTimestamp
+    @JsonIgnore
+    private Timestamp date;
 
     public void setUsername(String username)
     {
@@ -82,12 +86,12 @@ public class User {
 
     public void setUserDeviceMAC(String userDeviceMAC)
     {
-        /*if(!Pattern.matches
+        if(!Pattern.matches
                 ("^[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]$",
                         userDeviceMAC))
         {
             throw new IllegalArgumentException();
-        }*/
+        }
         this.userDeviceMAC = userDeviceMAC;
     }
 
@@ -96,7 +100,7 @@ public class User {
         this.isActive = isActive;
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return "User{" +
                 "username='" + username + '\'' +
@@ -105,5 +109,5 @@ public class User {
                 ", role=" + role +
                 ", userDeviceMAC='" + userDeviceMAC + '\'' +
                 '}';
-    }
+    }*/
 }

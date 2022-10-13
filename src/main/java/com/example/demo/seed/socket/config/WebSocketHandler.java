@@ -1,6 +1,6 @@
-package com.example.demo.socket.config;
+package com.example.demo.seed.socket.config;
 
-import com.example.demo.model.ACK;
+import com.example.demo.seed.model.ACK;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.stereotype.Component;

@@ -1,16 +1,11 @@
 package com.example.demo.controller;
 
-//import com.example.demo.socket.util.WebSocketUtil;
-import com.example.demo.socket.util.WebSocketUtil;
+//import WebSocketUtil;
+import com.example.demo.seed.util.WebSocketUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor

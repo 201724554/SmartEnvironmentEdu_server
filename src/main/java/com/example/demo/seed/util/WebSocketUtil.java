@@ -1,6 +1,6 @@
-package com.example.demo.socket.util;
+package com.example.demo.seed.util;
 
-import com.example.demo.socket.config.WebSocketHandler;
+import com.example.demo.seed.socket.config.WebSocketHandler;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 

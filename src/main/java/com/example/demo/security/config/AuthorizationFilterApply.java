@@ -5,15 +5,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
-public class TestFilterApply extends AbstractHttpConfigurer<TestFilterApply, HttpSecurity> {
+public class AuthorizationFilterApply extends AbstractHttpConfigurer<AuthorizationFilterApply, HttpSecurity> {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-        http.addFilterAfter(new TestFilter(authenticationManager), FilterSecurityInterceptor.class);
+        http.addFilterAfter(new AuthorizationFilter(authenticationManager), FilterSecurityInterceptor.class);
     }
 
-    public static TestFilterApply testFilterApply()
+    public static AuthorizationFilterApply authorizationFilterApply()
     {
-        return new TestFilterApply();
+        return new AuthorizationFilterApply();
     }
 }

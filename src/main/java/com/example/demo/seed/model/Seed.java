@@ -1,6 +1,6 @@
-package com.example.demo.model;
+package com.example.demo.seed.model;
 
-import com.example.demo.misc.Misc;
+import com.example.demo.seed.misc.Misc;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,8 +1,8 @@
-package com.example.demo.service;
+package com.example.demo.seed.service;
 
-import com.example.demo.model.ACK;
-import com.example.demo.model.Seed;
-import com.example.demo.repository.SeedRepository;
+import com.example.demo.seed.model.ACK;
+import com.example.demo.seed.model.Seed;
+import com.example.demo.seed.repository.SeedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

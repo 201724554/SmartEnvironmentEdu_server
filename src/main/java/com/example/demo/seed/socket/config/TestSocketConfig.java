@@ -1,9 +1,8 @@
-package com.example.demo.socket.config;
+package com.example.demo.seed.socket.config;
 
-import com.example.demo.model.ACK;
-import com.example.demo.model.Seed;
-import com.example.demo.repository.SeedRepository;
-import com.example.demo.service.SeedService;
+import com.example.demo.seed.model.ACK;
+import com.example.demo.seed.model.Seed;
+import com.example.demo.seed.service.SeedService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.JSONParser;
