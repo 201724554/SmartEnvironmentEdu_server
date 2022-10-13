@@ -1,10 +1,15 @@
-/*package com.example.demo.socket.config;
+package com.example.demo.seed.socket.config;
 
+import com.example.demo.seed.model.ACK;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Component
 public class WebSocketHandler extends TextWebSocketHandler {
@@ -25,15 +30,44 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        System.out.println("text message: "+message.getPayload());
+        JSONParser jsonParser = new JSONParser(message.getPayload());
+        try
+        {
+            LinkedHashMap<String, Object> json = jsonParser.object();
+            json.forEach((idx,elem)->{
+                System.out.println(idx + " " + elem);
+            });
+            ACK ack = ACK.builder()
+                    .status(200)
+                    .measure(true)
+                    .censor("")
+                    .mean(-1)
+                    .refresh(false)
+                    .build();
 
+            Map<String, Object> data = new HashMap<>();
+            data.put("ACK", ack);
+
+            try
+            {
+                String jsonACK = new ObjectMapper().writeValueAsString(data);
+                System.out.println("ACK "+jsonACK);
+                session.sendMessage(new TextMessage(jsonACK));
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         super.handleMessage(session, message);
-        System.out.println("message: "+message.getPayload());
-        session.sendMessage(new TextMessage("test return"));
     }
 
     @Override
@@ -49,4 +83,4 @@ public class WebSocketHandler extends TextWebSocketHandler {
     }
 
 
-}*/
+}

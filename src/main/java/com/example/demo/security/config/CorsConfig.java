@@ -1,5 +1,6 @@
 package com.example.demo.security.config;
 
+import com.example.demo.security.jwt.Properties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -15,6 +16,7 @@ public class CorsConfig {
         config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
+        config.addExposedHeader(Properties.ACCESS_HEADER);
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
