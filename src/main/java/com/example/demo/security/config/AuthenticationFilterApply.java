@@ -1,6 +1,5 @@
 package com.example.demo.security.config;
 
-import com.example.demo.redis.RedisService;
 import com.example.demo.redis.repo.AccessTokenRepository;
 import com.example.demo.redis.repo.RefreshTokenRepository;
 import org.springframework.security.authentication.AuthenticationManager;

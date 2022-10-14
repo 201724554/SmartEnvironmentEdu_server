@@ -134,4 +134,13 @@ public class UserRegisterController {
     {
        response.setStatus(HttpStatus.SERVICE_UNAVAILABLE.value());
     }
+
+    /**
+     * test
+     */
+    @GetMapping("/test")
+    private String test()
+    {
+        return "Test";
+    }
 }

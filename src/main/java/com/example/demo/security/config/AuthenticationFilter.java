@@ -1,6 +1,7 @@
 package com.example.demo.security.config;
 
 import com.example.demo.redis.entity.AccessToken;
+import com.example.demo.redis.entity.RefreshToken;
 import com.example.demo.redis.repo.AccessTokenRepository;
 import com.example.demo.redis.repo.RefreshTokenRepository;
 import com.example.demo.security.jwt.JwtUtil;
@@ -64,7 +65,12 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .username(principalDetails.getUsername())
                 .accessToken(JwtUtil.makeAccessJwt(principalDetails.getUsername(), Properties.ACCESS_HEADER))
                 .build();
+        RefreshToken refreshToken = RefreshToken.builder()
+                .username(principalDetails.getUsername())
+                .refreshToken(JwtUtil.makeAccessJwt(principalDetails.getUsername(), Properties.REFRESH_HEADER))
+                .build();
         accessTokenRepository.save(accessToken);
+        refreshTokenRepository.save(refreshToken);
         response.setHeader(Properties.ACCESS_HEADER, Properties.PREFIX + accessToken.getAccessToken());
     }
 }
