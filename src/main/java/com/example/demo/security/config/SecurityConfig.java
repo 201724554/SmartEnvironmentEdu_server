@@ -33,22 +33,23 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
                 .addFilter(corsConfig.corsFilter())
-                .apply(authenticationFilterApply(refreshTokenRepository, accessTokenRepository))
-                .and()
-                .apply(authorizationFilterApply(refreshTokenRepository, accessTokenRepository, userRepository))
-                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
+                .apply(authenticationFilterApply(refreshTokenRepository, accessTokenRepository))
+                .and()
+                .apply(authorizationFilterApply(refreshTokenRepository, accessTokenRepository, userRepository))
+                .and()
                 .logout().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .mvcMatchers("/login","/register/**","/test/**").permitAll()
-                        .mvcMatchers("/user/**","/logout").hasAnyRole("STUDENT","EDUCATOR","MANAGER","ADMIN")
+                        .mvcMatchers("/login","/register/**","/logout","/testtest/**","/client/socket/**").permitAll()
+                        .mvcMatchers("/user/**").hasAnyRole("STUDENT","EDUCATOR","MANAGER","ADMIN")
                         .mvcMatchers("/educator/**").hasAnyRole("EDUCATOR","MANAGER","ADMIN")
                         .mvcMatchers("/manager/**").hasAnyRole("MANAGER","ADMIN")
                         .mvcMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().denyAll()
                 );
         return http.build();
     }

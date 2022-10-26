@@ -2,10 +2,12 @@ package com.example.demo.user.controller;
 
 import com.example.demo.DTO.ResponseDTO;
 import com.example.demo.redis.entity.RegisterAuthNum;
+import com.example.demo.redis.repo.AccessTokenRepository;
+import com.example.demo.security.jwt.Properties;
+import com.example.demo.user.model.DTO.AddMACDTO;
 import com.example.demo.user.model.DTO.RegisterDTO;
 import com.example.demo.user.model.entity.Educator;
 import com.example.demo.user.model.entity.Student;
-import com.example.demo.user.model.entity.User;
 import com.example.demo.user.model.enumerate.IsActive;
 import com.example.demo.user.model.enumerate.IsAuthorized;
 import com.example.demo.user.model.enumerate.Role;
@@ -17,7 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Map;
@@ -29,6 +31,8 @@ import java.util.Random;
 public class UserRegisterController {
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private final AccessTokenRepository accessTokenRepository;
 
     /**
      * 일반 user, student 관련 api
@@ -47,7 +51,7 @@ public class UserRegisterController {
                 .username(registerDTO.getUsername())
                 .password(bCryptPasswordEncoder.encode(registerDTO.getPassword()))
                 .email(registerDTO.getEmail())
-                .role(Role.STUDENT)
+                .role(Role.ROLE_STUDENT)
                 .isActive(IsActive.NO)
                 .build();
 
@@ -77,7 +81,7 @@ public class UserRegisterController {
                 .username(registerDTO.getUsername())
                 .password(bCryptPasswordEncoder.encode(registerDTO.getPassword()))
                 .email(registerDTO.getEmail())
-                .role(Role.EDUCATOR)
+                .role(Role.ROLE_EDUCATOR)
                 .isActive(IsActive.NO)
                 .isAuthorized(IsAuthorized.NO)
                 .build();
@@ -113,6 +117,12 @@ public class UserRegisterController {
 
         return new ResponseDTO<>(HttpStatus.OK.value(),null);
     }
+    @PostMapping("/user/MAC")
+    private ResponseDTO<Object> addMAC(@Valid @RequestBody AddMACDTO addMACDTO)
+    {
+        userService.addMAC(addMACDTO.getUsername(), addMACDTO.getMAC());
+        return new ResponseDTO<>(HttpStatus.OK.value(), null);
+    }
 
     /**
      * 예외처리
@@ -122,6 +132,7 @@ public class UserRegisterController {
     private void methodArgumentNotValidExceptionHandler(HttpServletResponse response)
     {
         response.setStatus(HttpStatus.BAD_REQUEST.value());
+        System.out.println();
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -138,9 +149,15 @@ public class UserRegisterController {
     /**
      * test
      */
-    @GetMapping("/test")
-    private String test()
+    @GetMapping("/test/test2")
+    private void test2()
     {
-        return "Test";
+        System.out.println(accessTokenRepository.findById("pay7845").orElse(null).getAccessToken());
+    }
+
+    @GetMapping("/user/test")
+    private String userTest()
+    {
+        return "userTest";
     }
 }

@@ -9,11 +9,14 @@ import org.springframework.web.socket.config.annotation.*;
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
     private final WebSocketHandler webSocketHandler;
-    private final TestSocketConfig testSocketConfig;
-
+    private final TestSocketHandler testSocketHandler;
+    private final ClientSocketHandler clientSocketHandler;
+    private final test t;
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketHandler,"/test").setAllowedOriginPatterns("*");
-        registry.addHandler(testSocketConfig,"/testtest").setAllowedOriginPatterns("*");
+        //registry.addHandler(webSocketHandler,"/test").setAllowedOriginPatterns("*");
+        registry.addHandler(testSocketHandler,"/testtest").setAllowedOriginPatterns("*"); //main
+        registry.addHandler(clientSocketHandler, "/client/socket").setAllowedOriginPatterns("*").withSockJS().setInterceptors(t);
     }
+
 }

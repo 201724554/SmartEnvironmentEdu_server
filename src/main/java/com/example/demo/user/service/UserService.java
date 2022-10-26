@@ -2,6 +2,8 @@ package com.example.demo.user.service;
 
 import com.example.demo.mail.service.MailService;
 import com.example.demo.redis.entity.RegisterAuthNum;
+import com.example.demo.redis.repo.AccessTokenRepository;
+import com.example.demo.redis.repo.RefreshTokenRepository;
 import com.example.demo.redis.repo.RegisterAuthNumRepository;
 import com.example.demo.user.model.entity.User;
 import com.example.demo.user.model.enumerate.IsActive;
@@ -18,6 +20,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final RegisterAuthNumRepository registerAuthNumRepository;
     private final MailService mailService;
+    private final AccessTokenRepository accessTokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     /**
      register service
@@ -57,5 +61,21 @@ public class UserService {
     {
         mailService.sendAuthMail(registerAuthNum.getEmail(),registerAuthNum.getRegisterAuthNum());
         registerAuthNumRepository.save(registerAuthNum);
+    }
+
+    @Transactional
+    public void addMAC(String username, String MAC)
+    {
+        userRepository.findByUsername(username).orElseThrow(()->{throw new IllegalArgumentException();}).setUserDeviceMAC(MAC);
+    }
+
+    /**
+     * logout
+     */
+    @Transactional
+    public void logout(String username)
+    {
+        accessTokenRepository.deleteById(username);
+        refreshTokenRepository.deleteById(username);
     }
 }

@@ -63,14 +63,14 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
         AccessToken accessToken = AccessToken.builder()
                 .username(principalDetails.getUsername())
-                .accessToken(JwtUtil.makeAccessJwt(principalDetails.getUsername(), Properties.ACCESS_HEADER))
+                .accessToken(JwtUtil.makeAccessJwt(principalDetails.getUsername(), Properties.ACCESS))
                 .build();
         RefreshToken refreshToken = RefreshToken.builder()
                 .username(principalDetails.getUsername())
-                .refreshToken(JwtUtil.makeAccessJwt(principalDetails.getUsername(), Properties.REFRESH_HEADER))
+                .refreshToken(JwtUtil.makeAccessJwt(principalDetails.getUsername(), Properties.REFRESH))
                 .build();
         accessTokenRepository.save(accessToken);
         refreshTokenRepository.save(refreshToken);
-        response.setHeader(Properties.ACCESS_HEADER, Properties.PREFIX + accessToken.getAccessToken());
+        response.setHeader(Properties.HEADER_STRING, accessToken.getAccessToken());
     }
 }

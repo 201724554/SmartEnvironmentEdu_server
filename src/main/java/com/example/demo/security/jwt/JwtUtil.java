@@ -9,10 +9,11 @@ import java.util.Date;
 public class JwtUtil {
     public static String makeAccessJwt(String username, String type)
     {
-        return JWT.create()
+        return Properties.PREFIX +
+                JWT.create()
                 .withSubject(username)
                 .withExpiresAt(new Date(System.currentTimeMillis() +
-                        (type.equals(Properties.REFRESH_HEADER)
+                        (type.equals(Properties.REFRESH)
                                 ? Properties.REFRESH_EXPIRE_TIME * 1000
                                 : Properties.ACCESS_EXPIRE_TIME * 1000)))
                 .withClaim(Properties.CLAIM_USERNAME,username)
@@ -21,7 +22,7 @@ public class JwtUtil {
 
     public static String getClaim(HttpServletRequest request, String claim)
     {
-        String token = request.getHeader(Properties.ACCESS_HEADER);
+        String token = request.getHeader(Properties.HEADER_STRING);
         return JWT.decode(token.replace(Properties.PREFIX,"")).getClaim(claim).asString();
     }
 }

@@ -15,6 +15,7 @@ import com.example.demo.user.model.enumerate.IsActive;
 import com.example.demo.user.repo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,8 +27,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-import static com.sun.activation.registries.LogSupport.log;
+import java.util.Enumeration;
 
 public class AuthorizationFilter extends BasicAuthenticationFilter {
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -43,10 +43,10 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
     }
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String accessToken = request.getHeader(Properties.ACCESS_HEADER);
+        String accessToken = request.getHeader(Properties.HEADER_STRING);
         if(accessToken == null || !accessToken.startsWith(Properties.PREFIX))
         {
-            chain.doFilter(request,response);
+            chain.doFilter(request, response);
             return;
         }
 
@@ -56,54 +56,46 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
                     .getClaim(Properties.CLAIM_USERNAME).asString();
             AccessToken storedAccessToken = accessTokenRepository.findById(username).orElse(null);
 
-            if(storedAccessToken == null)
+            if(storedAccessToken == null || !accessToken.equals(storedAccessToken.getAccessToken()))
             {
                 throw new IllegalArgumentException("저장된 토큰과 일치하지 않습니다");
             }
 
             User user = userRepository.findByUsernameAndIsActive(username, IsActive.YES).orElseThrow(()-> new IllegalArgumentException("해당 유저가 존재하지 않습니다"));
-            handleSecurityContextHolder(user, request, response, chain);
+
+            RefreshToken storedRefreshToken = refreshTokenRepository.findById(user.getUsername()).orElse(null);
+
+            if(storedRefreshToken == null)
+            {
+                throw new IllegalArgumentException("refresh 토큰이 만료되었습니다");
+            }
+
+            AccessToken newAccessToken = AccessToken.builder()
+                    .username(user.getUsername())
+                    .accessToken(JwtUtil.makeAccessJwt(user.getUsername(), Properties.ACCESS))
+                    .build();
+            accessTokenRepository.save(newAccessToken);
+
+            response.setHeader(Properties.HEADER_STRING, newAccessToken.getAccessToken());
+
+            PrincipalDetails principalDetails = new PrincipalDetails(user);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails,
+                    null,
+                    principalDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            chain.doFilter(request,response);
         }
         catch (TokenExpiredException e)
         {
             log.warn("토큰이 만료되었습니다");
-            String username = JwtUtil.getClaim(request, Properties.CLAIM_USERNAME);
-
-            RefreshToken refreshToken = refreshTokenRepository.findById(username).orElse(null);
-            if(refreshToken == null)
-            {
-                throw new IllegalArgumentException("refresh 토큰이 없습니다");
-            }
-
-            AccessToken newAccessToken = AccessToken.builder()
-                    .username(username)
-                    .accessToken(JwtUtil.makeAccessJwt(username,Properties.ACCESS_HEADER))
-                    .build();
-
-            accessTokenRepository.save(newAccessToken);
-
-            User user = userRepository.findByUsernameAndIsActive(username, IsActive.YES).orElseThrow(()-> new IllegalArgumentException("해당 유저가 존재하지 않습니다"));
-            response.setHeader(Properties.ACCESS_HEADER, newAccessToken.getAccessToken());
-            handleSecurityContextHolder(user, request, response, chain);
+            refreshTokenRepository.deleteById(JwtUtil.getClaim(request,Properties.CLAIM_USERNAME));
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
         }
         catch(IllegalArgumentException e)
         {
             log.warn(e.getMessage());
-            chain.doFilter(request,response);
-            return;
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
         }
-
-
-        chain.doFilter(request,response);
-    }
-
-    private void handleSecurityContextHolder(User user, HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        PrincipalDetails principalDetails = new PrincipalDetails(user);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails,
-                null,
-                principalDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        chain.doFilter(request,response);
     }
 }

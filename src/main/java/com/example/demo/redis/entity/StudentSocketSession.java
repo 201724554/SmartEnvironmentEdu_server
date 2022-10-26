@@ -5,17 +5,15 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
+import org.springframework.web.socket.WebSocketSession;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@RedisHash(value = "refreshToken")
-public class RefreshToken {
+@RedisHash(value = "studentSession")
+public class StudentSocketSession {
     @Id
-    private String username;
-    private String refreshToken;
-    @TimeToLive
-    @Builder.Default
-    private long expireTime = Properties.REFRESH_EXPIRE_TIME;
+    String studentId;
+    WebSocketSession studentSession;
 }

@@ -13,10 +13,11 @@ public class CorsConfig {
     public CorsFilter corsFilter(){
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("*");
+        config.addAllowedOriginPattern("**");
+        config.setAllowCredentials(true);
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.addExposedHeader(Properties.ACCESS_HEADER);
+        config.addExposedHeader(Properties.HEADER_STRING);
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
