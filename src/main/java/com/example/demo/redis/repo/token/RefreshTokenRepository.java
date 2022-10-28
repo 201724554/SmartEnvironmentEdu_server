@@ -1,8 +1,7 @@
-package com.example.demo.redis.repo;
+package com.example.demo.redis.repo.token;
 
-import com.example.demo.redis.entity.RefreshToken;
+import com.example.demo.redis.entity.token.RefreshToken;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 
 public interface RefreshTokenRepository extends CrudRepository<RefreshToken, String> {
 }

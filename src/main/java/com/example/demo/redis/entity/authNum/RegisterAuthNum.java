@@ -1,4 +1,4 @@
-package com.example.demo.redis.entity;
+package com.example.demo.redis.entity.authNum;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

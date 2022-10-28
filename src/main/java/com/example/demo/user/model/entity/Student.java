@@ -23,12 +23,10 @@ public class Student extends User{
     }
     @ManyToOne(fetch = FetchType.LAZY)
     private Educator educator;
-
     public void setEducator(Educator educator)
     {
         this.educator = educator;
     }
-
     @Override
     public String toString() {
         return "Student{" +

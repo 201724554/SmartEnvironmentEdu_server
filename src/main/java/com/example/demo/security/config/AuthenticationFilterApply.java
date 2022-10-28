@@ -1,7 +1,7 @@
 package com.example.demo.security.config;
 
-import com.example.demo.redis.repo.AccessTokenRepository;
-import com.example.demo.redis.repo.RefreshTokenRepository;
+import com.example.demo.redis.repo.token.AccessTokenRepository;
+import com.example.demo.redis.repo.token.RefreshTokenRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;

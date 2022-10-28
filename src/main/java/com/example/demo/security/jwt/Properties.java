@@ -1,6 +1,7 @@
 package com.example.demo.security.jwt;
 
 public interface Properties {
+    String DOMAIN = "http://localhost:8080";
     String KEY = "spzkfkznqo";
     String PREFIX = "Bearer ";
     String HEADER_STRING = "authorization";

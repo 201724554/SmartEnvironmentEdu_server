@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class UserLogoutController {
     private final UserService userService;
-    @PostMapping("/logout")
+    @PostMapping("/Logout")
     private ResponseDTO<Object> logoutHandler(HttpServletRequest request)
     {
         if(request.getHeader(Properties.HEADER_STRING) != null)

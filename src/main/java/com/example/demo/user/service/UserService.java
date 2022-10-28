@@ -1,10 +1,10 @@
 package com.example.demo.user.service;
 
 import com.example.demo.mail.service.MailService;
-import com.example.demo.redis.entity.RegisterAuthNum;
-import com.example.demo.redis.repo.AccessTokenRepository;
-import com.example.demo.redis.repo.RefreshTokenRepository;
-import com.example.demo.redis.repo.RegisterAuthNumRepository;
+import com.example.demo.redis.entity.authNum.RegisterAuthNum;
+import com.example.demo.redis.repo.token.AccessTokenRepository;
+import com.example.demo.redis.repo.token.RefreshTokenRepository;
+import com.example.demo.redis.repo.authNum.RegisterAuthNumRepository;
 import com.example.demo.user.model.entity.User;
 import com.example.demo.user.model.enumerate.IsActive;
 import com.example.demo.user.repo.UserRepository;
@@ -75,7 +75,6 @@ public class UserService {
     @Transactional
     public void logout(String username)
     {
-        accessTokenRepository.deleteById(username);
         refreshTokenRepository.deleteById(username);
     }
 }

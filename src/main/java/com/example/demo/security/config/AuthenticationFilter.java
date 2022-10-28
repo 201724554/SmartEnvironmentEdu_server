@@ -1,9 +1,8 @@
 package com.example.demo.security.config;
 
-import com.example.demo.redis.entity.AccessToken;
-import com.example.demo.redis.entity.RefreshToken;
-import com.example.demo.redis.repo.AccessTokenRepository;
-import com.example.demo.redis.repo.RefreshTokenRepository;
+import com.example.demo.redis.entity.token.RefreshToken;
+import com.example.demo.redis.repo.token.AccessTokenRepository;
+import com.example.demo.redis.repo.token.RefreshTokenRepository;
 import com.example.demo.security.jwt.JwtUtil;
 import com.example.demo.security.jwt.Properties;
 import com.example.demo.security.principal.PrincipalDetails;
@@ -61,16 +60,18 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-        AccessToken accessToken = AccessToken.builder()
+       /* AccessToken accessToken = AccessToken.builder()
                 .username(principalDetails.getUsername())
                 .accessToken(JwtUtil.makeAccessJwt(principalDetails.getUsername(), Properties.ACCESS))
-                .build();
+                .build();*/
+        String accessToken = JwtUtil.makeAccessJwt(principalDetails.getUsername(), Properties.ACCESS);
         RefreshToken refreshToken = RefreshToken.builder()
                 .username(principalDetails.getUsername())
                 .refreshToken(JwtUtil.makeAccessJwt(principalDetails.getUsername(), Properties.REFRESH))
                 .build();
-        accessTokenRepository.save(accessToken);
+        //accessTokenRepository.save(accessToken);
         refreshTokenRepository.save(refreshToken);
-        response.setHeader(Properties.HEADER_STRING, accessToken.getAccessToken());
+        response.setHeader(Properties.HEADER_STRING, accessToken);
+        response.setHeader(Properties.REFRESH, refreshToken.getRefreshToken());
     }
 }

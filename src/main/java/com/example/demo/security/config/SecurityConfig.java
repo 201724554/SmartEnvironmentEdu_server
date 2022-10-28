@@ -1,8 +1,7 @@
 package com.example.demo.security.config;
 
-import com.example.demo.redis.RedisService;
-import com.example.demo.redis.repo.AccessTokenRepository;
-import com.example.demo.redis.repo.RefreshTokenRepository;
+import com.example.demo.redis.repo.token.AccessTokenRepository;
+import com.example.demo.redis.repo.token.RefreshTokenRepository;
 import com.example.demo.user.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -42,9 +41,8 @@ public class SecurityConfig {
                 .and()
                 .apply(authorizationFilterApply(refreshTokenRepository, accessTokenRepository, userRepository))
                 .and()
-                .logout().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .mvcMatchers("/login","/register/**","/logout","/testtest/**","/client/socket/**").permitAll()
+                        .mvcMatchers("/login","/register/**","/Logout","/device/**","/client/socket/**").permitAll()
                         .mvcMatchers("/user/**").hasAnyRole("STUDENT","EDUCATOR","MANAGER","ADMIN")
                         .mvcMatchers("/educator/**").hasAnyRole("EDUCATOR","MANAGER","ADMIN")
                         .mvcMatchers("/manager/**").hasAnyRole("MANAGER","ADMIN")

@@ -1,9 +1,8 @@
 package com.example.demo.user.controller;
 
 import com.example.demo.DTO.ResponseDTO;
-import com.example.demo.redis.entity.RegisterAuthNum;
-import com.example.demo.redis.repo.AccessTokenRepository;
-import com.example.demo.security.jwt.Properties;
+import com.example.demo.redis.entity.authNum.RegisterAuthNum;
+import com.example.demo.redis.repo.token.AccessTokenRepository;
 import com.example.demo.user.model.DTO.AddMACDTO;
 import com.example.demo.user.model.DTO.RegisterDTO;
 import com.example.demo.user.model.entity.Educator;
@@ -19,7 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Map;
