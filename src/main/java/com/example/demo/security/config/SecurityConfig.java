@@ -1,9 +1,7 @@
 package com.example.demo.security.config;
 
-import com.example.demo.redis.RedisService;
-import com.example.demo.redis.repo.AccessTokenRepository;
-import com.example.demo.redis.repo.RefreshTokenRepository;
-import com.example.demo.user.repo.UserRepository;
+import com.example.demo.token.repository.RefreshTokenRepository;
+import com.example.demo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +25,6 @@ public class SecurityConfig {
     }
     private final CorsConfig corsConfig;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final AccessTokenRepository accessTokenRepository;
     private final UserRepository userRepository;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -38,13 +35,13 @@ public class SecurityConfig {
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .apply(authenticationFilterApply(refreshTokenRepository, accessTokenRepository))
+                .apply(authenticationFilterApply(refreshTokenRepository))
                 .and()
-                .apply(authorizationFilterApply(refreshTokenRepository, accessTokenRepository, userRepository))
+                .apply(authorizationFilterApply(refreshTokenRepository, userRepository))
                 .and()
                 .logout().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .mvcMatchers("/login","/register/**","/logout","/testtest/**","/client/socket/**").permitAll()
+                        .mvcMatchers("/login","/register/**","/logout","/device/**","/client/socket/**","/test/**").permitAll()
                         .mvcMatchers("/user/**").hasAnyRole("STUDENT","EDUCATOR","MANAGER","ADMIN")
                         .mvcMatchers("/educator/**").hasAnyRole("EDUCATOR","MANAGER","ADMIN")
                         .mvcMatchers("/manager/**").hasAnyRole("MANAGER","ADMIN")

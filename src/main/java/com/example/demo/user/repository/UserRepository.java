@@ -1,4 +1,4 @@
-package com.example.demo.user.repo;
+package com.example.demo.user.repository;
 
 import com.example.demo.user.model.entity.User;
 import com.example.demo.user.model.enumerate.IsActive;

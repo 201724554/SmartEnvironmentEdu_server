@@ -5,9 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/*@Builder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data*/
+@Data
 public class ClientACK {
+    private String data;
+    private String name;
+    private String MAC;
 }

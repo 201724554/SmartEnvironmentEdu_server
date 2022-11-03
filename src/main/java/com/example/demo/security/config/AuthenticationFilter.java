@@ -1,13 +1,11 @@
 package com.example.demo.security.config;
 
-import com.example.demo.redis.entity.AccessToken;
-import com.example.demo.redis.entity.RefreshToken;
-import com.example.demo.redis.repo.AccessTokenRepository;
-import com.example.demo.redis.repo.RefreshTokenRepository;
 import com.example.demo.security.jwt.JwtUtil;
 import com.example.demo.security.jwt.Properties;
 import com.example.demo.security.principal.PrincipalDetails;
-import com.example.demo.user.model.DTO.LoginDTO;
+import com.example.demo.DTO.LoginDTO;
+import com.example.demo.token.model.RefreshToken;
+import com.example.demo.token.repository.RefreshTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,12 +22,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 @RequiredArgsConstructor
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final AccessTokenRepository accessTokenRepository;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -61,16 +59,16 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-        AccessToken accessToken = AccessToken.builder()
-                .username(principalDetails.getUsername())
-                .accessToken(JwtUtil.makeAccessJwt(principalDetails.getUsername(), Properties.ACCESS))
-                .build();
+
         RefreshToken refreshToken = RefreshToken.builder()
                 .username(principalDetails.getUsername())
                 .refreshToken(JwtUtil.makeAccessJwt(principalDetails.getUsername(), Properties.REFRESH))
                 .build();
-        accessTokenRepository.save(accessToken);
+
+        refreshTokenRepository.findByUsername(principalDetails.getUsername()).ifPresent(storedToken -> refreshTokenRepository.deleteByUsername(principalDetails.getUsername()));
+
         refreshTokenRepository.save(refreshToken);
-        response.setHeader(Properties.HEADER_STRING, accessToken.getAccessToken());
+        response.setHeader(Properties.HEADER_STRING, JwtUtil.makeAccessJwt(principalDetails.getUsername(), Properties.ACCESS));
+        response.setHeader(Properties.REFRESH, refreshToken.getRefreshToken());
     }
 }

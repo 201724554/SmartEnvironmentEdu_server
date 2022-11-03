@@ -1,5 +1,6 @@
 package com.example.demo.user.model.entity;
 
+import com.example.demo.device.model.UserDevice;
 import com.example.demo.user.model.enumerate.IsActive;
 import com.example.demo.user.model.enumerate.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Entity
@@ -34,8 +36,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(length = 20)
-    private String userDeviceMAC;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserDevice> userDevice;
 
     @Column(nullable = false, length = 3)
     @Enumerated(EnumType.STRING)
@@ -84,30 +86,19 @@ public class User {
         }
     }
 
-    public void setUserDeviceMAC(String userDeviceMAC)
+    public void setUserDeviceMAC(List<UserDevice> userDevice)
     {
-        if(!Pattern.matches
+        /*if(!Pattern.matches
                 ("^[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]$",
                         userDeviceMAC))
         {
             throw new IllegalArgumentException();
-        }
-        this.userDeviceMAC = userDeviceMAC;
+        }*/
+        this.userDevice = userDevice;
     }
 
     public void setIsActive(IsActive isActive)
     {
         this.isActive = isActive;
     }
-
-    /*@Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", role=" + role +
-                ", userDeviceMAC='" + userDeviceMAC + '\'' +
-                '}';
-    }*/
 }

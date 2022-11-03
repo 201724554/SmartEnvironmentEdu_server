@@ -16,7 +16,7 @@ public class Controller {
     {
         try{
             System.out.println("controller");
-            WebSocketUtil.send(sessionId, "send test");
+            WebSocketUtil.send(sessionId, "send CustomHandshakeHandler");
         }
         catch (IOException e)
         {
