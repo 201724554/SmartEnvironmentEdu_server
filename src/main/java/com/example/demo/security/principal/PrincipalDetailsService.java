@@ -2,7 +2,7 @@ package com.example.demo.security.principal;
 
 import com.example.demo.user.model.entity.User;
 import com.example.demo.user.model.enumerate.IsActive;
-import com.example.demo.user.repo.UserRepository;
+import com.example.demo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

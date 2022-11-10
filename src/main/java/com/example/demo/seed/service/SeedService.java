@@ -15,7 +15,7 @@ public class SeedService {
     @Transactional
     public ACK handleReceivedData(Seed seed)
     {
-        seedRepository.save(seed);
+        //seedRepository.save(seed);
         return ACK.builder()
                 .status(200)
                 .measure(true)

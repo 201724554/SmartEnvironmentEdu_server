@@ -1,5 +1,5 @@
 package com.example.demo.user.model.enumerate;
 
 public enum Role {
-    STUDENT, EDUCATOR, MANAGER, ADMIN
+    ROLE_STUDENT, ROLE_EDUCATOR, ROLE_MANAGER, ROLE_ADMIN
 }

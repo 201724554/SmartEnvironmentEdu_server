@@ -1,11 +1,15 @@
 package com.example.demo.user.service;
 
+import com.example.demo.device.model.UserDevice;
+import com.example.demo.device.repository.UserDeviceRepository;
 import com.example.demo.mail.service.MailService;
 import com.example.demo.redis.entity.RegisterAuthNum;
 import com.example.demo.redis.repo.RegisterAuthNumRepository;
+import com.example.demo.token.repository.RefreshTokenRepository;
 import com.example.demo.user.model.entity.User;
 import com.example.demo.user.model.enumerate.IsActive;
-import com.example.demo.user.repo.UserRepository;
+import com.example.demo.user.model.enumerate.Role;
+import com.example.demo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +22,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final RegisterAuthNumRepository registerAuthNumRepository;
     private final MailService mailService;
+    private final UserDeviceRepository userDeviceRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     /**
      register service
@@ -31,8 +37,8 @@ public class UserService {
     public void addUser(User user, RegisterAuthNum registerAuthNum)
     {
         userRepository.save(user);
-        registerAuthNumRepository.save(registerAuthNum);
-        mailService.sendAuthMail(user.getEmail(),registerAuthNum.getRegisterAuthNum());
+        //registerAuthNumRepository.save(registerAuthNum);
+        //mailService.sendAuthMail(user.getEmail(),registerAuthNum.getRegisterAuthNum());
     }
     @Transactional
     public void confirmAuthentication(String username, String email, String authNum)
@@ -57,5 +63,38 @@ public class UserService {
     {
         mailService.sendAuthMail(registerAuthNum.getEmail(),registerAuthNum.getRegisterAuthNum());
         registerAuthNumRepository.save(registerAuthNum);
+    }
+
+    /**
+     device add service
+     */
+    @Transactional
+    public void addMAC(String username, String MAC)
+    {
+        User user = userRepository.findByUsername(username).orElseThrow(IllegalArgumentException::new);
+        UserDevice userDevice = userDeviceRepository.findByUserDeviceMAC(MAC).orElseThrow(IllegalArgumentException::new);
+        userDevice.setUser(user);
+    }
+
+    /**
+     * logout
+     */
+    @Transactional
+    public void logout(String username)
+    {
+        refreshTokenRepository.deleteByUsername(username);
+    }
+
+    /**
+     * CustomHandshakeHandler
+     */
+    @Transactional
+    public void test_makeAdmin(String username)
+    {
+        User user = userRepository.findByUsername(username).orElse(null);
+        if(user != null)
+        {
+            user.setRole(Role.ROLE_ADMIN.toString());
+        }
     }
 }

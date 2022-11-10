@@ -2,10 +2,10 @@ package com.example.demo.user.controller;
 
 import com.example.demo.DTO.ResponseDTO;
 import com.example.demo.redis.entity.RegisterAuthNum;
-import com.example.demo.user.model.DTO.RegisterDTO;
+import com.example.demo.DTO.AddMACDTO;
+import com.example.demo.DTO.RegisterDTO;
 import com.example.demo.user.model.entity.Educator;
 import com.example.demo.user.model.entity.Student;
-import com.example.demo.user.model.entity.User;
 import com.example.demo.user.model.enumerate.IsActive;
 import com.example.demo.user.model.enumerate.IsAuthorized;
 import com.example.demo.user.model.enumerate.Role;
@@ -17,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Map;
@@ -47,8 +46,8 @@ public class UserRegisterController {
                 .username(registerDTO.getUsername())
                 .password(bCryptPasswordEncoder.encode(registerDTO.getPassword()))
                 .email(registerDTO.getEmail())
-                .role(Role.STUDENT)
-                .isActive(IsActive.NO)
+                .role(Role.ROLE_STUDENT)
+                .isActive(IsActive.YES)
                 .build();
 
         RegisterAuthNum registerAuthNum = RegisterAuthNum.builder()
@@ -77,7 +76,7 @@ public class UserRegisterController {
                 .username(registerDTO.getUsername())
                 .password(bCryptPasswordEncoder.encode(registerDTO.getPassword()))
                 .email(registerDTO.getEmail())
-                .role(Role.EDUCATOR)
+                .role(Role.ROLE_EDUCATOR)
                 .isActive(IsActive.NO)
                 .isAuthorized(IsAuthorized.NO)
                 .build();
@@ -133,5 +132,20 @@ public class UserRegisterController {
     private void mailSendExceptionHandler(HttpServletResponse response)
     {
        response.setStatus(HttpStatus.SERVICE_UNAVAILABLE.value());
+    }
+
+    /**
+     * CustomHandshakeHandler
+     */
+    @PostMapping("/test/authup")
+    private void makeAdmin(@RequestBody Map<String,String> mp)
+    {
+        userService.test_makeAdmin(mp.get("username"));
+    }
+
+    @GetMapping("/user/test")
+    private String userTest()
+    {
+        return "userTest";
     }
 }
