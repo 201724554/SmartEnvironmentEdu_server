@@ -3,6 +3,7 @@ package com.example.demo.seed.socket.controller;
 import com.example.demo.seed.model.ClientACK;
 import com.example.demo.seed.model.Seed;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -16,15 +17,16 @@ public class MessageController {
     private final SimpMessagingTemplate template;
 
     @MessageMapping("/device") //device -> user
-    private void test(@Payload Seed seed)
+    private void test(@Payload String test) //jsonMappingException
     {
-        System.out.println(seed.getMAC());
-        template.convertAndSend("/topic/user/"+seed.getMAC(),"device -> user");
+        System.out.println(test);
+        template.convertAndSend("/topic","ACK");
     }
 
     @MessageMapping("/user") //user -> device
     private void test2(@Payload ClientACK clientACK)
     {
-        template.convertAndSend("/topic/"+clientACK.getMAC(),"user -> device");
+        System.out.println(clientACK);
+        //template.convertAndSend("/topic/"+clientACK.getMAC(),"user -> device");
     }
 }

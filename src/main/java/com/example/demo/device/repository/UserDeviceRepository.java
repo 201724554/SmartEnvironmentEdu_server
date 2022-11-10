@@ -9,5 +9,6 @@ import java.util.Optional;
 
 public interface UserDeviceRepository extends JpaRepository<UserDevice, Integer> {
     Optional<UserDevice> findByUserDeviceMAC(String userDeviceMAC);
+    boolean existsByUserDeviceMAC(String userDeviceMAC);
     List<UserDevice> findAllByUser(User user);
 }

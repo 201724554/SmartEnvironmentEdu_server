@@ -9,6 +9,6 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 public class AddMACDTO {
     String username;
-    @Pattern(regexp = "^[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]-[\\da-zA-Z][\\da-zA-Z]$")
+    @Pattern(regexp = "^[\\da-zA-Z][\\da-zA-Z]:[\\da-zA-Z][\\da-zA-Z]:[\\da-zA-Z][\\da-zA-Z]:[\\da-zA-Z][\\da-zA-Z]:[\\da-zA-Z][\\da-zA-Z]:[\\da-zA-Z][\\da-zA-Z]$")
     String MAC;
 }

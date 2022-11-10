@@ -2,6 +2,7 @@ package com.example.demo.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -24,5 +25,9 @@ public class JwtUtil {
     {
         String token = request.getHeader(Properties.HEADER_STRING);
         return JWT.decode(token.replace(Properties.PREFIX,"")).getClaim(claim).asString();
+    }
+    public static boolean isTokenExpired(String token) throws JWTDecodeException
+    {
+        return JWT.decode(token.replace(Properties.PREFIX, "")).getExpiresAt().before(new Date());
     }
 }

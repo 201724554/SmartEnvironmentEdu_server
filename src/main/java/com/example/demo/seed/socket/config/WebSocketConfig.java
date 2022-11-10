@@ -1,6 +1,9 @@
 package com.example.demo.seed.socket.config;
 
+import com.example.demo.device.repository.UserDeviceRepository;
+import com.example.demo.security.jwt.JwtUtil;
 import com.example.demo.security.jwt.Properties;
+import com.example.demo.token.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
@@ -10,7 +13,6 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
-import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.web.socket.config.annotation.*;
 
 import java.util.Objects;
@@ -23,19 +25,53 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final TestSocketHandler testSocketHandler;
     private final ClientSocketHandler clientSocketHandler;
     private final CustomHandshakeHandler customHandshakeHandler;
-
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final UserDeviceRepository userDeviceRepository;
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new ChannelInterceptor() {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-                System.out.println("message: " + message);
-                System.out.println("헤더: " + message.getHeaders());
-                System.out.println("토큰: " + accessor.getNativeHeader(Properties.HEADER_STRING));
+
+                if(StompCommand.DISCONNECT.equals(accessor.getCommand()))
+                {
+                    System.out.println("d");
+                }
+
                 if(StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    System.out.println("test: " + Objects.requireNonNull(accessor.getFirstNativeHeader(Properties.HEADER_STRING)));
-                    //validate token
+                    String authHeader = accessor.getFirstNativeHeader(Properties.HEADER_STRING);
+                    String MAC = accessor.getFirstNativeHeader("MAC");
+
+                    System.out.println("authHeader: "+authHeader);
+                    System.out.println("MAC: "+MAC);
+
+                    if(authHeader == null && MAC == null)
+                    {
+                        throw new IllegalArgumentException();
+                    }
+                    else
+                    {
+                        if(authHeader == null)
+                        {
+                            if(!userDeviceRepository.existsByUserDeviceMAC(MAC))
+                            {
+                                throw new IllegalArgumentException("등록되지 않은 MAC");
+                            }
+                        }
+                        else if(MAC == null)
+                        {
+                            if(!refreshTokenRepository.existsByRefreshToken(Objects.requireNonNull(accessor.getFirstNativeHeader(Properties.HEADER_STRING))))
+                            {
+                                throw new IllegalArgumentException("토큰이 없음");
+                            }
+                            if(JwtUtil.isTokenExpired(authHeader))
+                            {
+                                refreshTokenRepository.deleteByRefreshToken(authHeader);
+                                throw new IllegalArgumentException("토큰이 만료됨");
+                            }
+                        }
+                    }
                 }
                 return message;
             }
@@ -44,7 +80,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/device").setAllowedOriginPatterns("*");
+        registry.addEndpoint("/device").setAllowedOriginPatterns("*").withSockJS();
         registry.addEndpoint("/client/socket").setAllowedOriginPatterns("*").withSockJS();
     }
 
