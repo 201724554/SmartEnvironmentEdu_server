@@ -40,6 +40,7 @@ public class UserDeviceController {
     @GetMapping("/user/device/{username}")
     private ResponseDTO<List<String>> getDeviceList(@PathVariable String username)
     {
+
         List<UserDevice> deviceList = userDeviceService.getDeviceList(username);
 
         if(deviceList.isEmpty())

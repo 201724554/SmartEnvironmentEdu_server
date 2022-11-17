@@ -2,31 +2,47 @@ package com.example.demo.seed.socket.controller;
 
 import com.example.demo.seed.model.ClientACK;
 import com.example.demo.seed.model.Seed;
+import com.example.demo.seed.repository.SeedRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.handler.annotation.Header;
+
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
 @RestController
 public class MessageController {
     private final SimpMessagingTemplate template;
+    private final SeedRepository seedRepository;
 
     @MessageMapping("/device") //device -> user
-    private void test(@Payload String test) //jsonMappingException
+    private void test(@Header String test) //jsonMappingException
     {
         System.out.println(test);
-        template.convertAndSend("/topic","ACK");
+        template.convertAndSend("/topic" + "/user/" + "94:B9:7E:D3:20:64","ACK");
     }
 
     @MessageMapping("/user") //user -> device
-    private void test2(@Payload ClientACK clientACK)
+    private void test2(@Payload String test/*ClientACK clientACK*/)
     {
-        System.out.println(clientACK);
-        //template.convertAndSend("/topic/"+clientACK.getMAC(),"user -> device");
+        System.out.println(test);
+        template.convertAndSend("/topic", "user -> device" + test);
+    }
+
+    @MessageMapping("/test")
+    private void test3(@Payload Seed seed)
+    {
+        System.out.println(seed);
+        String date = seed.getDate();
+        LocalDateTime localDate = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        seed.setSavedDate(localDate);
+        seedRepository.save(seed);
+        template.convertAndSend("/topic" + "/user",seed);
     }
 }
