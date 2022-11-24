@@ -6,6 +6,8 @@ import com.example.demo.mail.service.MailService;
 import com.example.demo.redis.entity.RegisterAuthNum;
 import com.example.demo.redis.repo.RegisterAuthNumRepository;
 import com.example.demo.token.repository.RefreshTokenRepository;
+import com.example.demo.user.model.entity.Educator;
+import com.example.demo.user.model.entity.Student;
 import com.example.demo.user.model.entity.User;
 import com.example.demo.user.model.enumerate.IsActive;
 import com.example.demo.user.model.enumerate.Role;
@@ -39,6 +41,13 @@ public class UserService {
         userRepository.save(user);
         //registerAuthNumRepository.save(registerAuthNum);
         //mailService.sendAuthMail(user.getEmail(),registerAuthNum.getRegisterAuthNum());
+    }
+
+    @Transactional
+    public void addStudent(String username, String studentUsername)
+    {
+        Student student = (Student) userRepository.findByUsernameAndIsActive(studentUsername, IsActive.YES).orElseThrow(()->{throw new IllegalArgumentException();});
+        student.setEducator((Educator) userRepository.findByUsernameAndIsActive(username, IsActive.YES).orElseThrow(()->{throw new IllegalArgumentException();}));
     }
     @Transactional
     public void confirmAuthentication(String username, String email, String authNum)

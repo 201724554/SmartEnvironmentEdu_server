@@ -35,14 +35,9 @@ public class MessageController {
         template.convertAndSend("/topic", "user -> device" + test);
     }
 
-    @MessageMapping("/test")
+    @MessageMapping("/test") //for test
     private void test3(@Payload Seed seed)
     {
-        System.out.println(seed);
-        String date = seed.getDate();
-        LocalDateTime localDate = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        seed.setSavedDate(localDate);
-        seedRepository.save(seed);
         template.convertAndSend("/topic" + "/user",seed);
     }
 }

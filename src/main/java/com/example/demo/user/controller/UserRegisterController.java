@@ -89,6 +89,12 @@ public class UserRegisterController {
         return new ResponseDTO<>(HttpStatus.OK.value(),null);
     }
 
+    @PostMapping("/educator/student/add")
+    private void registerStudent(@RequestBody Map<String,String> mp)
+    {
+        userService.addStudent(mp.get("username"), mp.get("student"));
+    }
+
     /**
      * 공용 api
     */
