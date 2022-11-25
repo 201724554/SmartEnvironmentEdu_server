@@ -69,6 +69,7 @@ public class UserDeviceService {
             deviceList.forEach((elem)->{
                 macListDTO.getMacList().add(elem.getUserDeviceMAC());
             });
+            list.add(macListDTO);
         }
 
         return list;
