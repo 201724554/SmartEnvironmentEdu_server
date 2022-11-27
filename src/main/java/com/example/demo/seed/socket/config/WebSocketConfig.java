@@ -34,11 +34,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
-                if(StompCommand.DISCONNECT.equals(accessor.getCommand()))
-                {
-                    System.out.println("d");
-                }
-
                 if(StompCommand.CONNECT.equals(accessor.getCommand())) {
                     String authHeader = accessor.getFirstNativeHeader(Properties.HEADER_STRING);
                     String MAC = accessor.getFirstNativeHeader("MAC");

@@ -6,11 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 
 @Data
 @Builder
@@ -23,48 +24,50 @@ public class Seed {
     private int id;
 
     @Column(nullable = false, length = 20)
-    private String MAC;
+    private String mac;
 
     @Nullable
     @Builder.Default
-    private float HUM = Misc.SeedDefaultValue;
+    private float hum = Misc.SeedDefaultValue;
 
     @Nullable
     @Builder.Default
-    private float TEMP = Misc.SeedDefaultValue;
+    private float temp = Misc.SeedDefaultValue;
 
     @Nullable
     @Builder.Default
-    private float TUR = Misc.SeedDefaultValue;
+    private float tur = Misc.SeedDefaultValue;
 
     @Nullable
     @Builder.Default
-    private float PH = Misc.SeedDefaultValue;
+    private float ph = Misc.SeedDefaultValue;
 
     @Nullable
     @Builder.Default
-    private float DUST = Misc.SeedDefaultValue;
+    private float dust = Misc.SeedDefaultValue;
 
     @Nullable
     @Builder.Default
-    private float DO = Misc.SeedDefaultValue;
+    private float dox = Misc.SeedDefaultValue;
 
     @Nullable
     @Builder.Default
-    private float CO2 = Misc.SeedDefaultValue;
+    private float co2 = Misc.SeedDefaultValue;
 
     @Nullable
     @Builder.Default
-    private float LUX = Misc.SeedDefaultValue;
+    private float lux = Misc.SeedDefaultValue;
 
     @Nullable
     @Builder.Default
-    private float HUM_EARTH = Misc.SeedDefaultValue;
+    private float hum_EARTH = Misc.SeedDefaultValue;
 
     @Nullable
     @Builder.Default
-    private float PRE = Misc.SeedDefaultValue;
+    private float pre = Misc.SeedDefaultValue;
 
-    @CreationTimestamp
-    Timestamp createTime;
+    private LocalDateTime date;
+
+    @Transient
+    private String dateString;
 }

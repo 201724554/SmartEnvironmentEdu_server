@@ -1,6 +1,7 @@
 package com.example.demo.device.controller;
 
 import com.example.demo.DTO.AddMACDTO;
+import com.example.demo.DTO.MacListDTO;
 import com.example.demo.DTO.ResponseDTO;
 import com.example.demo.device.model.UserDevice;
 import com.example.demo.device.service.UserDeviceService;
@@ -38,21 +39,9 @@ public class UserDeviceController {
     }
 
     @GetMapping("/user/device/{username}")
-    private ResponseDTO<List<String>> getDeviceList(@PathVariable String username)
+    private ResponseDTO<List<MacListDTO>> getDeviceList(@PathVariable String username)
     {
-        List<UserDevice> deviceList = userDeviceService.getDeviceList(username);
-
-        if(deviceList.isEmpty())
-        {
-            throw new IllegalArgumentException();
-        }
-
-        List<String> deviceMacList = new ArrayList<>();
-        deviceList.forEach((elem)->{
-            deviceMacList.add(elem.getUserDeviceMAC());
-        });
-
-        return new ResponseDTO<>(HttpStatus.OK.value(), deviceMacList);
+        return new ResponseDTO<>(HttpStatus.OK.value(), userDeviceService.getDeviceList(username));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
