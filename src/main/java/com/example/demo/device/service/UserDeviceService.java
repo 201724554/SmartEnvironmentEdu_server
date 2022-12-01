@@ -73,6 +73,5 @@ public class UserDeviceService {
         }
 
         return list;
-        //return userDeviceRepository.findAllByUser(userRepository.findByUsernameAndIsActive(username, IsActive.YES).orElseThrow(IllegalArgumentException::new));
     }
 }
