@@ -38,6 +38,7 @@ public class MessageController {
     @MessageMapping("/test") //for test
     private void test3(@Payload Seed seed)
     {
-        template.convertAndSend("/topic" + "/user",seed);
+        System.out.println(seed);
+        //template.convertAndSend("/topic" + "/user",seed);
     }
 }
