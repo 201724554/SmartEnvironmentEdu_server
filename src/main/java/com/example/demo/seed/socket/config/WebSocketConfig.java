@@ -21,10 +21,6 @@ import java.util.Objects;
 @EnableWebSocketMessageBroker
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-    private final WebSocketHandler webSocketHandler;
-    private final TestSocketHandler testSocketHandler;
-    private final ClientSocketHandler clientSocketHandler;
-    private final CustomHandshakeInterceptor customHandshakeInterceptor;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserDeviceRepository userDeviceRepository;
     @Override
@@ -34,18 +30,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
-                System.out.println(message);
-                /*if(StompCommand.CONNECT.equals(accessor.getCommand()))
+                if(StompCommand.CONNECT.equals(accessor.getCommand()))
                 {
                     String authHeader = accessor.getFirstNativeHeader(Properties.HEADER_STRING);
                     String MAC = accessor.getFirstNativeHeader("MAC");
 
-                    //System.out.println("authHeader: "+authHeader);
-                    //System.out.println("MAC: "+MAC);
-
                     if(authHeader == null && MAC == null)
                     {
-                        throw new IllegalArgumentException();
+                        throw new IllegalArgumentException("권한이 없음");
                     }
                     else
                     {
@@ -69,7 +61,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                             }
                         }
                     }
-                }*/
+                }
                 return message;
             }
         });
