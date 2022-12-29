@@ -27,8 +27,8 @@ public class SeedController {
         String start = mp.get("startDate");
         String end = mp.get("endDate");
 
-        LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.RFC_1123_DATE_TIME).plusHours(9);
-        LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.RFC_1123_DATE_TIME).plusHours(9);
+        LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.RFC_1123_DATE_TIME);
+        LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.RFC_1123_DATE_TIME);
 
         List<Seed> list = seedService.getDataByDateAndUsername(startDate, endDate, username);
 
