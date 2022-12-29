@@ -1,7 +1,6 @@
 package com.example.demo.seed.model;
 
 import com.example.demo.seed.misc.Misc;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -70,4 +69,8 @@ public class Seed {
 
     @Transient
     private String dateString;
+
+    @Nullable
+    @Column(length = 10)
+    private String location;
 }

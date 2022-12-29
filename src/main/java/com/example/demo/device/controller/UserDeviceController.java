@@ -5,6 +5,7 @@ import com.example.demo.DTO.MacListDTO;
 import com.example.demo.DTO.ResponseDTO;
 import com.example.demo.device.model.UserDevice;
 import com.example.demo.device.service.UserDeviceService;
+import com.example.demo.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,12 +21,14 @@ import java.util.Map;
 @RestController
 public class UserDeviceController {
     private final UserDeviceService userDeviceService;
+    private final UserService userService;
 
     @PostMapping("/manager/device")
     private ResponseDTO<Object> addDevice(@Valid @RequestBody AddMACDTO addMACDTO)
     {
         UserDevice userDevice = UserDevice.builder()
                 .userDeviceMAC(addMACDTO.getMAC())
+                .user(userService.getUser(addMACDTO.getUsername()))
                 .build();
         userDeviceService.addDevice(userDevice);
         return new ResponseDTO<>(HttpStatus.OK.value(), null);

@@ -5,10 +5,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/seed?serverTimezone=Asia/Seoul
-    #url: jdbc:mysql://database-1.c1np9azthax6.ap-northeast-2.rds.amazonaws.com/seed
     username: jin
     password: Deokjin7@
-    #password: deokjin7845
 
   jpa:
     open-in-view: true

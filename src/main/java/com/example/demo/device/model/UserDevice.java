@@ -24,6 +24,9 @@ public class UserDevice {
     @Column(length = 20, nullable = false, unique = true)
     private String userDeviceMAC;
 
+    @Column(length = 10)
+    private String name;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 

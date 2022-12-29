@@ -27,8 +27,8 @@ public class SeedController {
         String start = mp.get("startDate");
         String end = mp.get("endDate");
 
-        LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.RFC_1123_DATE_TIME).plusHours(9);
-        LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.RFC_1123_DATE_TIME).plusHours(9);
+        LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.RFC_1123_DATE_TIME);
+        LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.RFC_1123_DATE_TIME);
 
         List<Seed> list = seedService.getDataByDateAndUsername(startDate, endDate, username);
 
@@ -43,10 +43,10 @@ public class SeedController {
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 Seed seed = objectMapper.readValue(elem, Seed.class);
-                seed.setDate(LocalDateTime.parse(seed.getDateString(), DateTimeFormatter.RFC_1123_DATE_TIME).plusHours(9));
+                seed.setDate(LocalDateTime.parse(seed.getDateString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                 list.add(seed);
             } catch (JsonProcessingException e) {
-                throw new IllegalArgumentException();
+                e.printStackTrace();
             }
         });
         seedService.saveData(list);

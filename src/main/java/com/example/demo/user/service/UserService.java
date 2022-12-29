@@ -77,6 +77,11 @@ public class UserService {
     /**
      device add service
      */
+    @Transactional(readOnly = true)
+    public User getUser(String username)
+    {
+        return userRepository.findByUsernameAndIsActive(username, IsActive.YES).orElseThrow(()->{throw new IllegalArgumentException();});
+    }
     @Transactional
     public void addMAC(String username, String MAC)
     {

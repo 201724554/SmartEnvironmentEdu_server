@@ -41,7 +41,7 @@ public class UserDeviceService {
         Map<String,List<String>> map = new HashMap<>();
         List<MacListDTO> list = new ArrayList<>();
 
-        if(user.getRole().equals(Role.ROLE_EDUCATOR))
+        if(!user.getRole().equals(Role.ROLE_STUDENT))
         {
             Educator educator = (Educator) user;
             MacListDTO macListDTO = new MacListDTO(educator.getUsername(), new ArrayList<>());
@@ -62,7 +62,7 @@ public class UserDeviceService {
                 list.add(macListDTO1);
             });
         }
-        else if(user.getRole().equals(Role.ROLE_STUDENT))
+        else
         {
             MacListDTO macListDTO = new MacListDTO(user.getUsername(), new ArrayList<>());
             List<UserDevice> deviceList = userDeviceRepository.findAllByUser(user);
@@ -73,6 +73,5 @@ public class UserDeviceService {
         }
 
         return list;
-        //return userDeviceRepository.findAllByUser(userRepository.findByUsernameAndIsActive(username, IsActive.YES).orElseThrow(IllegalArgumentException::new));
     }
 }
