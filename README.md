@@ -9,4 +9,4 @@
 * 사용자의 선택에 따라 기기에서 수신한 데이터를 저장할 수 있도록 API 구현
 
 ## 데이터 구조
-<img src="https://user-images.githubusercontent.com/38274661/223510748-5b44d3a7-cd73-494e-8638-8f0c369f4d28.jpg" width="300" height="500"/>
+<img src="https://user-images.githubusercontent.com/38274661/223510748-5b44d3a7-cd73-494e-8638-8f0c369f4d28.jpg" width="400" height="500"/>
