@@ -10,3 +10,7 @@
 
 ## 데이터 구조
 <img src="https://user-images.githubusercontent.com/38274661/223510748-5b44d3a7-cd73-494e-8638-8f0c369f4d28.jpg" width="400" height="500"/>
+
+## 아키택처
+<img src="https://user-images.githubusercontent.com/38274661/223520137-5e090463-7ad0-4018-abb5-d6202fc75fd8.jpg" witdh="500" height="500"/>
+
